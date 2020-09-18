@@ -4,22 +4,10 @@ var input = prompt();
 console.log("Input:", input);
 
 var months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"];
-var monthsKey = {};
-for (var i in months) {
-    var month = months[i];
-    monthsKey[month] = month;
-    monthsKey[month.slice(0, 3)] = month;
-}
-
 var weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-var weekdaysKey = {};
-for (var i in weekdays) {
-    var weekday = weekdays[i];
-    weekdaysKey[weekday] = weekday;
-    weekdaysKey[weekday.replace(/day/, "")] = weekday;
-}
+var dayReferences = ["today", "tomorrow", "this", "next"];
 
-console.log(getClosest(input, months));
+
 
 /*
 GENERAL DESIGN
@@ -36,7 +24,7 @@ GENERAL DESIGN
     Input form
     | [name of event] [[time word] [time]] [link or link word] |
     Name of event - anyt text
-    Time word - at, due
+    Time word - at--, from-to, due
     Time -
         date - today, tomorrow, this weekday, next weekday, (month) day (year)
             weekday - whichever is closest
@@ -51,26 +39,13 @@ GENERAL DESIGN
 // takes in a string input and outputs an object of a new task, event, thing, etc
 function parseInput(input) {
 
+
+    var today = new Date();
+
+
 }
 
 // finds the most similar string to input that is in options
-/*
-function getClosest(input, options) {
-    var closest = "";
-    var leastDistance = editDistance(input, Object.keys(options)[0]);
-    for (var i in Object.keys(options)) {
-        var option = Object.keys(options)[i];
-        var distance = editDistance(input, option);
-        console.log(option, distance);
-        if (distance < leastDistance) {
-            closest = options[option];
-            leastDistance = distance;
-        }
-    }
-    return closest;
-}
-*/
-
 function getClosest(input, options) {
     var closest = "";
     var leastDistance = input.length;
