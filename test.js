@@ -11,7 +11,15 @@ for (var i in months) {
     monthsKey[month.slice(0, 3)] = month;
 }
 
-console.log(getClosest(input, monthsKey));
+var weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+var weekdaysKey = {};
+for (var i in weekdays) {
+    var weekday = weekdays[i];
+    weekdaysKey[weekday] = weekday;
+    weekdaysKey[weekday.replace(/day/, "")] = weekday;
+}
+
+console.log(getClosest(input, months));
 
 /*
 GENERAL DESIGN
@@ -46,14 +54,32 @@ function parseInput(input) {
 }
 
 // finds the most similar string to input that is in options
+/*
 function getClosest(input, options) {
-    closest = "";
-    leastDistance = input.length;
+    var closest = "";
+    var leastDistance = editDistance(input, Object.keys(options)[0]);
     for (var i in Object.keys(options)) {
         var option = Object.keys(options)[i];
         var distance = editDistance(input, option);
+        console.log(option, distance);
         if (distance < leastDistance) {
             closest = options[option];
+            leastDistance = distance;
+        }
+    }
+    return closest;
+}
+*/
+
+function getClosest(input, options) {
+    var closest = "";
+    var leastDistance = input.length;
+    for (var i in options) {
+        var option = options[i];
+        var distance = editDistance(input, option.slice(0, input.length));
+        console.log(option, distance);
+        if (distance < leastDistance) {
+            closest = option;
             leastDistance = distance;
         }
     }
@@ -64,7 +90,7 @@ function getClosest(input, options) {
 function editDistance(string1, string2) {
     var insertionWeight = 1;
     var deletionWeight = 1;
-    var substitutionWeight = 2;
+    var substitutionWeight = 1;
     var swapWeight = 1;
 
     var n = string1.length;
@@ -87,12 +113,12 @@ function editDistance(string1, string2) {
     // calculate the rest of the slots
     for (var i = 1; i <= n; i++) {
         for (var j = 1; j <= m; j++) {
-            insertionDist = distance[i][j - 1] + insertionWeight;
-            deletionDist = distance[i - 1][j] + deletionWeight;
-            substitutionDist = distance[i - 1][j - 1] + substitutionWeight * (string1[i] === string2[j] ? 0 : 1);
-            swapDist = Math.max(n, m); // just initialize as largest in case you cannot swap
+            var insertionDist = distance[i][j - 1] + insertionWeight;
+            var deletionDist = distance[i - 1][j] + deletionWeight;
+            var substitutionDist = distance[i - 1][j - 1] + substitutionWeight * (string1[i - 1] === string2[j - 1] ? 0 : 1);
+            var swapDist = Math.max(n, m); // just initialize as largest in case you cannot swap
             if (i >= 2 && j >= 2) {
-                validSwap = string1[i - 2] === string2[j - 1] && string1[i - 1] === string2[j - 2];
+                var validSwap = string1[i - 2] === string2[j - 1] && string1[i - 1] === string2[j - 2];
                 swapDist = distance[i - 2][j - 2] + (validSwap ? swapWeight : swapWeight + 1);
             }
 
