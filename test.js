@@ -4,8 +4,15 @@ console.log("Input:", input);
 const months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"];
 const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const dayReferences = ["today", "tomorrow", "this", "next"];
+const timeWords = {
+    "task": "due",
+    "event": "at",
+    "thing": ""
+};
 
-console.log("Closest month:", getClosest(input, months));
+//console.log("Closest month:", getClosest(input, months));
+
+parseInput(input);
 
 /*
 GENERAL DESIGN
@@ -22,7 +29,7 @@ GENERAL DESIGN
     Input form
     | [name of event] [[time word] [time]] [link or link word] |
     Name of event - anyt text
-    Time word - at--, from-to, due
+    Time word - at--, from-to(?), due
     Time -
         date - today, tomorrow, this weekday, next weekday, (month) day (year)
             weekday - whichever is closest
@@ -37,8 +44,8 @@ GENERAL DESIGN
 /*
 ROADMAP
 - Parsing input
-    - Months
-    - Weekdays
+    - DONE Months
+    - DONE Weekdays
     - Task name from time, test out returning an object
     - Today, tomorrow
     - this weekday, next weekday
@@ -60,11 +67,47 @@ ROADMAP
 // takes in a string input, separates task name from time from other elements and outputs an object of a new task, event, thing, etc
 function parseInput(input) {
 
+    /*
     const today = new Date()
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
+    */
 
+    // Strategies
+    // separate by keywords - at, due
+    // separate multiple times by hyphen (-), assume same day unless specified otherwise
 
+    // check valid input
+    if (checkValidInput(input)) {
+
+    }
+
+    // parsing
+    if (input.includes(timeWords["task"])) {
+        const [name, dateTime] = input.split(timeWords["task"]);
+        console.log("Name:", name);
+        const time = dateTime.match(/\d+\w{1,2}$/)[0];
+        console.log("Time:", time);
+        const date = dateTime.replace(time, "");
+        // this doesn't work because what if they don't put the month, you want to assume the month properly right?
+        const [year, day, month] = date.split(" ").reverse();
+        console.log("Year:", year);
+        console.log("Day:", day);
+        console.log("Month:", month);
+    }
+    
+
+    // assume time is today
+    const today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1; // getMonth is 0-11
+    let day = today.getDate();
+
+}
+
+function checkValidInput(input) {
+    const validForm = /asdf/;
+    return validForm.test(input);
 }
 
 // finds the most similar string to input that is in options
