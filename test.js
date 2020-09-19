@@ -39,7 +39,20 @@ ROADMAP
 - Parsing input
     - Months
     - Weekdays
-    - Task name from time
+    - Task name from time, test out returning an object
+    - Today, tomorrow
+    - this weekday, next weekday
+    - Is it a task, event, or thing?
+- Storing data
+    - Think about what data structures are optimal
+- UI
+    - React!!!
+    - Displaying tables
+- Back to data
+    - Node!!!
+    - Storing and reading locally
+- UX
+    - Allow the user to edit elements
 
 */
 
