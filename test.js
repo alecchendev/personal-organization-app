@@ -1,13 +1,11 @@
-console.log("Hello world");
-
-var input = prompt();
+const input = prompt();
 console.log("Input:", input);
 
-var months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"];
-var weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-var dayReferences = ["today", "tomorrow", "this", "next"];
+const months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"];
+const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+const dayReferences = ["today", "tomorrow", "this", "next"];
 
-
+console.log("Closest month:", getClosest(input, months));
 
 /*
 GENERAL DESIGN
@@ -36,23 +34,33 @@ GENERAL DESIGN
 
 */
 
-// takes in a string input and outputs an object of a new task, event, thing, etc
+/*
+ROADMAP
+- Parsing input
+    - Months
+    - Weekdays
+    - Task name from time
+
+*/
+
+
+// takes in a string input, separates task name from time from other elements and outputs an object of a new task, event, thing, etc
 function parseInput(input) {
 
-
-    var today = new Date();
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
 
 
 }
 
 // finds the most similar string to input that is in options
 function getClosest(input, options) {
-    var closest = "";
-    var leastDistance = input.length;
-    for (var i in options) {
-        var option = options[i];
-        var distance = editDistance(input, option.slice(0, input.length));
-        console.log(option, distance);
+    let closest = "";
+    let leastDistance = input.length;
+    for (let i in options) {
+        let option = options[i];
+        let distance = editDistance(input, option.slice(0, input.length));
         if (distance < leastDistance) {
             closest = option;
             leastDistance = distance;
@@ -63,37 +71,37 @@ function getClosest(input, options) {
 
 // calculates the damerau-levenshtein (with adjacent letter swaps) minimum edit distance from string1 to string2
 function editDistance(string1, string2) {
-    var insertionWeight = 1;
-    var deletionWeight = 1;
-    var substitutionWeight = 1;
-    var swapWeight = 1;
+    const insertionWeight = 1;
+    const deletionWeight = 1;
+    const substitutionWeight = 1;
+    const swapWeight = 1;
 
-    var n = string1.length;
-    var m = string2.length;
+    const n = string1.length;
+    const m = string2.length;
     // initialize 2d array in one line
     // let array = Array(rows).fill().map(() => Array(columns).fill(0));
-    var distance = [];
-    for (var i = 0; i < n + 1; i++) {
+    let distance = [];
+    for (let i = 0; i < n + 1; i++) {
         distance.push(new Array(m + 1).fill(0));
     }
 
     // initialize comparison between empty string to the other string
-    for (var i = 0; i <= n; i++) {
+    for (let i = 0; i <= n; i++) {
         distance[i][0] = i;
     }
-    for (var i = 0; i <= m; i++) {
+    for (let i = 0; i <= m; i++) {
         distance[0][i] = i;
     }
 
     // calculate the rest of the slots
-    for (var i = 1; i <= n; i++) {
-        for (var j = 1; j <= m; j++) {
-            var insertionDist = distance[i][j - 1] + insertionWeight;
-            var deletionDist = distance[i - 1][j] + deletionWeight;
-            var substitutionDist = distance[i - 1][j - 1] + substitutionWeight * (string1[i - 1] === string2[j - 1] ? 0 : 1);
-            var swapDist = Math.max(n, m); // just initialize as largest in case you cannot swap
+    for (let i = 1; i <= n; i++) {
+        for (let j = 1; j <= m; j++) {
+            let insertionDist = distance[i][j - 1] + insertionWeight;
+            let deletionDist = distance[i - 1][j] + deletionWeight;
+            let substitutionDist = distance[i - 1][j - 1] + substitutionWeight * (string1[i - 1] === string2[j - 1] ? 0 : 1);
+            let swapDist = Math.max(n, m); // just initialize as largest in case you cannot swap
             if (i >= 2 && j >= 2) {
-                var validSwap = string1[i - 2] === string2[j - 1] && string1[i - 1] === string2[j - 2];
+                let validSwap = string1[i - 2] === string2[j - 1] && string1[i - 1] === string2[j - 2];
                 swapDist = distance[i - 2][j - 2] + (validSwap ? swapWeight : swapWeight + 1);
             }
 
