@@ -1,7 +1,8 @@
-const input = prompt();
+//const input = prompt();
+const input = "asdf due dec 13 1159p";
 console.log("Input:", input);
 
-const months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"];
+const months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
 const weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const dayReferences = ["today", "tomorrow", "this", "next"];
 const timeWords = {
@@ -12,7 +13,7 @@ const timeWords = {
 
 //console.log("Closest month:", getClosest(input, months));
 
-parseInput(input);
+console.log(parseInput(input));
 
 /*
 GENERAL DESIGN
@@ -48,7 +49,7 @@ THINGS DONE BEFORE ROADMAP
 
 ROADMAP
 - Parsing input - just test for base input form of | task name | due | month day (year) time | - asdf due dec 13 1159p
-    - Recognize and parse task name from date from time, test out returning an object
+    - DONE Recognize and parse task name from date from time, test out returning an object
 - Storing data
     - Think about what data structures are optimal
     - Test out getting task from input into a table
@@ -93,26 +94,35 @@ function parseInput(input) {
 
     }
 
-    // parsing
+    // parsing - current/basic form - asdf due dec 13 1159p
     if (input.includes(timeWords["task"])) {
-        const [name, dateTime] = input.split(timeWords["task"]);
+        const name = input.split(timeWords["task"])[0].trim();
+        const dateTime = input.split(timeWords["task"])[1];
         console.log("Name:", name);
         const time = dateTime.match(/\d+\w{1,2}$/)[0];
+        const hours = parseInt(time.slice(0, 2)) + (time[5] === "p" ? 12 : 0);
+        const minutes = parseInt(time.slice(2, 4));
         console.log("Time:", time);
-        const date = dateTime.replace(time, "");
-        // this doesn't work because what if they don't put the month, you want to assume the month properly right?
-        const [year, day, month] = date.split(" ").reverse();
-        console.log("Year:", year);
-        console.log("Day:", day);
-        console.log("Month:", month);
-    }
-    
+        const date = dateTime.replace(time, "").trim();
+        console.log(date);
+        // assume time is today
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = parseInt(months.findIndex(x => x === getClosest(date.split(" ")[0], months))); // findIndex takes in a method to test
+        const day = parseInt(date.split(" ")[1]);
+        console.log(day);
+        console.log(month);
+        console.log(year);
 
-    // assume time is today
-    const today = new Date();
-    let year = today.getFullYear();
-    let month = today.getMonth() + 1; // getMonth is 0-11
-    let day = today.getDate();
+        const task = {
+            "name": name,
+            // figure out better naming so you can avoid confusion here
+            "date": new Date(year, month, day, hours, minutes)
+        };
+
+        return task;
+    }
+
 
 }
 
