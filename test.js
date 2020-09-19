@@ -42,24 +42,35 @@ GENERAL DESIGN
 */
 
 /*
+THINGS DONE BEFORE ROADMAP
+- DONE Recognizing months
+- DONE Recognizing weekdays
+
 ROADMAP
-- Parsing input
-    - DONE Months
-    - DONE Weekdays
-    - Task name from time, test out returning an object
-    - Today, tomorrow
-    - this weekday, next weekday
-    - Is it a task, event, or thing?
+- Parsing input - just test for base input form of | task name | due | month day (year) time | - asdf due dec 13 1159p
+    - Recognize and parse task name from date from time, test out returning an object
 - Storing data
     - Think about what data structures are optimal
+    - Test out getting task from input into a table
 - UI
     - React!!!
     - Displaying tables
 - Back to data
     - Node!!!
     - Storing and reading locally
+- Parsing input pt. 2
+    - Is it a task, event, or thing?
+- Storing data pt. 2
+    - Tasks vs events vs things - probably just make 3 of the same type of thing
+    - Store new data
+    - display new data
 - UX
     - Allow the user to edit elements
+- Parsing input pt. 3
+    - Assuming today's and so on
+    - Today, tomorrow
+    - this weekday, next weekday
+    - Anything else you think of
 
 */
 
