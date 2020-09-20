@@ -13,7 +13,18 @@ const timeWords = {
 
 //console.log("Closest month:", getClosest(input, months));
 
-console.log(parseInput(input));
+//console.log(parseInput(input));
+
+const data = {
+    "tasks": [
+
+    ]
+    // "events": [],
+    // "things": []
+};
+
+storeData(parseInput(input));
+console.log(data);
 
 /*
 GENERAL DESIGN
@@ -48,11 +59,15 @@ THINGS DONE BEFORE ROADMAP
 - DONE Recognizing weekdays
 
 ROADMAP
-- Parsing input - just test for base input form of | task name | due | month day (year) time | - asdf due dec 13 1159p
+- DONE Parsing input - just test for base input form of | task name | due | month day (year) time | - asdf due dec 13 1159p
     - DONE Recognize and parse task name from date from time, test out returning an object
 - Storing data
     - Think about what data structures are optimal
-    - Test out getting task from input into a table
+        - Probably just store in a js object that has a tasks array
+        - Task array holds task objects
+        - That's p much it
+        - Possibly have an abstract class for elements - tasks, events, and things would all extend element
+    - Test out getting task from input into an object
 - UI
     - React!!!
     - Displaying tables
@@ -74,6 +89,12 @@ ROADMAP
     - Anything else you think of
 
 */
+
+// takes object and stores it in data
+function storeData(object) {
+    const type = "tasks";
+    data[type].unshift(object); // push most recent task to the top
+}
 
 
 // takes in a string input, separates task name from time from other elements and outputs an object of a new task, event, thing, etc
@@ -126,6 +147,7 @@ function parseInput(input) {
 
 }
 
+// checks if the input is of a form able to be parsed into an element object
 function checkValidInput(input) {
     const validForm = /asdf/;
     return validForm.test(input);
