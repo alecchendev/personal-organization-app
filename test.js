@@ -16,7 +16,7 @@ const timeWords = {
 //console.log(parseInput(input));
 
 const data = {
-    "tasks": [
+    "entries": [
 
     ]
     // "events": [],
@@ -67,6 +67,11 @@ ROADMAP
         - Task array holds task objects
         - That's p much it
         - Possibly have an abstract class for elements - tasks, events, and things would all extend element
+        - NEW STRUCTURE INSPIRED BY NOTION
+            - A single list of entries, each entry has a name, time, end time
+            - Individual lists of tasks, events, things act as filters
+            - Today page is basically another set of filters, and they'll just display their specific properties
+            - Every time there is an input, it will store it in entries, and the lists will just update
     - Test out getting task from input into an object
 - UI
     - React!!!
@@ -87,12 +92,15 @@ ROADMAP
     - Today, tomorrow
     - this weekday, next weekday
     - Anything else you think of
-
+- Other features
+    - Today page
+    - Note taking
+    - Linked + unlinked references
 */
 
 // takes object and stores it in data
 function storeData(object) {
-    const type = "tasks";
+    const type = "entries";
     data[type].unshift(object); // push most recent task to the top
 }
 
