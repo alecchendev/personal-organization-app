@@ -1,10 +1,12 @@
 
-let app = new Vue({
+let vueTest = new Vue({
     el: '#app',
     data: {
         message: 'Hello Vue!'
     }
 })
+
+
 
 
 //const input = prompt();
@@ -83,7 +85,7 @@ ROADMAP
             - Every time there is an input, it will store it in entries, and the lists will just update
     - Test out getting task from input into an object
 - UI
-    - React!!!
+    - React!!! ..or vue??!
     - Displaying tables
 - Back to data
     - Node!!!
