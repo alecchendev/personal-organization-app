@@ -1,3 +1,12 @@
+
+let app = new Vue({
+    el: '#app',
+    data: {
+        message: 'Hello Vue!'
+    }
+})
+
+
 //const input = prompt();
 const input = "asdf due dec 13 1159p";
 console.log("Input:", input);
