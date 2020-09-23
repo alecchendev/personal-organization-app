@@ -86,7 +86,7 @@ ROADMAP
     - Test out getting task from input into an object
 - UI
     - React!!! ..or vue??!
-    - Displaying tables
+    - Displaying the basic table
 - Back to data
     - Node!!!
     - Storing and reading locally
@@ -104,6 +104,7 @@ ROADMAP
     - this weekday, next weekday
     - Anything else you think of
 - Other features
+    - Material UI, or some sort of more interesting styling/UI
     - Today page
     - Note taking
     - Linked + unlinked references
@@ -162,8 +163,6 @@ function parseInput(input) {
 
         return task;
     }
-
-
 }
 
 // checks if the input is of a form able to be parsed into an element object

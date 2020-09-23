@@ -4,17 +4,6 @@ import './index.css';
 
 // first commit
 
-function InputForm(props) {
-  return (
-    <form>
-      <label>
-        <input type="text" />
-      </label>
-      <input type="submit" value={props.submitLabel} onClick={props.onClick}/>
-    </form>
-  )
-}
-
 function Entry(props) {
   return (
     <tr>
@@ -65,22 +54,29 @@ class EntrySystem extends React.Component {
     })
   }
 
+
   handleSubmit(event) {
     
     // Update list of entries
     const entries = this.state.entries.slice();
-    entries.unshift(this.state.inputValue);
+    entries.unshift(this.parseInput(this.state.inputValue));
     this.setState({
       inputValue: this.state.inputValue,
       columnNames: this.state.columnNames,
       entries: entries
     })
-    console.log(this.state.entries);
+    console.log(entries);
     //alert(event.target.value);
     // empty the input box
     event.preventDefault();
   }
 
+  parseInput(input) {
+    const name = input;
+    const time = "testTime";
+    return {name:name, time:time};
+  }
+  
   render() {
 
 
