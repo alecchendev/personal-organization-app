@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+import {parseInput} from './test'
+
 // first commit
 
 function Entry(props) {
@@ -25,6 +27,12 @@ function Table(props) {
       </table>
     </div>
   )
+}
+
+function testFunction(input) {
+  const name = input;
+  const time = "testTime";
+  return {name:name, time:time};
 }
 
 class EntrySystem extends React.Component {
@@ -56,10 +64,13 @@ class EntrySystem extends React.Component {
 
 
   handleSubmit(event) {
-    
+    event.preventDefault();
     // Update list of entries
     const entries = this.state.entries.slice();
-    entries.unshift(this.parseInput(this.state.inputValue));
+    //entries.unshift(this.parseInput(this.state.inputValue));
+    const newEntry = parseInput(this.state.inputValue);
+    console.log(newEntry);
+    entries.unshift(newEntry);
     this.setState({
       inputValue: this.state.inputValue,
       columnNames: this.state.columnNames,

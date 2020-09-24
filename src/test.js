@@ -1,11 +1,12 @@
 
+/*
 let vueTest = new Vue({
     el: '#app',
     data: {
         message: 'Hello Vue!'
     }
 })
-
+*/
 
 
 
@@ -34,8 +35,8 @@ const data = {
     // "things": []
 };
 
-storeData(parseInput(input));
-console.log(data);
+//storeData(parseInput(input));
+//console.log(data);
 
 /*
 GENERAL DESIGN
@@ -118,8 +119,8 @@ function storeData(object) {
 
 
 // takes in a string input, separates task name from time from other elements and outputs an object of a new task, event, thing, etc
-function parseInput(input) {
-
+//function parseInput(input) {
+export const parseInput = (input) => {
     /*
     const today = new Date()
     const tomorrow = new Date(today)
@@ -158,7 +159,7 @@ function parseInput(input) {
         const task = {
             "name": name,
             // figure out better naming so you can avoid confusion here
-            "date": new Date(year, month, day, hours, minutes)
+            "time": year.toString() + ", " + months[month] + " " + day.toString() + " " + hours.toString()//(new Date(year, month, day, hours, minutes)).toString()
         };
 
         return task;
