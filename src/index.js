@@ -64,7 +64,7 @@ class EntrySystem extends React.Component {
 
 
   handleSubmit(event) {
-    event.preventDefault();
+    //event.preventDefault();
     // Update list of entries
     const entries = this.state.entries.slice();
     //entries.unshift(this.parseInput(this.state.inputValue));
