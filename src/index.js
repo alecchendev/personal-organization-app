@@ -5,18 +5,49 @@ import './index.css';
 
 // basically, just combine both into a simplified file
 
+parseInput("task cs 196 shit sep 25 1159p");
+parseInput("event macs 100 lecture sep 25 10-1050a");
+parseInput("thing call chris");
+//parseTask("cs 196 shit sep 25 1159p");
+//parseEvent("macs 100 lecture sep 25 10-1050a");
+//parseThing("call chris");
 
 // Minimal backend code
 function parseInput(input) {
-    // parsing - current/basic form - [entryType] [task name] [month] [day] [time] - task name month day time
-    const elements = input.split(" ");
-    const [entryType, name, month, day, time] = elements;
-    const entry = {
-        type: entryType,
-        name: name,
-        time: [time, day, month].join(" ")
+
+  const elements = input.split(" ");
+  const type = elements.shift();
+  const parseType = {
+    "task": parseTask,
+    "event": parseEvent,
+    "thing": parseThing
+  }
+
+  let entryData;
+  try {
+    entryData = parseType[type](elements.join(" "));
+  } catch {
+    entryData = {
+      type: "",
+      name: "",
+      when: "",
+      toWhen: ""
     }
-    return entry;
+  }
+  const entry = {};
+  const entryProps = ["type", "name", "when", "toWhen"];
+
+  for (let index in entryProps) {
+    const prop = entryProps[index];
+    if (entryData.hasOwnProperty(prop)) {
+      entry[prop] = entryData[prop];
+    } else {
+      entry[prop] = "";
+    }
+  }
+
+  //console.log(entry);
+  return entry;
 }
 
 function reverseString(str) {
@@ -47,7 +78,7 @@ function parseTask(input) {
     name: name,
     when: when
   }
-  console.log(task);
+  //console.log(task);
 
   // follup on tuition friday
 
@@ -81,7 +112,7 @@ function parseEvent(input) {
     when: when,
     toWhen: toWhen,
   }
-  console.log(event);
+  //console.log(event);
 
   return event;
 }
@@ -93,13 +124,9 @@ function parseThing(input) {
     type: type,
     name: name
   }
-  console.log(thing);
+  //console.log(thing);
   return thing;
 }
-
-parseTask("cs 196 shit sep 25 1159p");
-parseEvent("macs 100 lecture sep 25 10-1050a");
-parseThing("call chris");
 
 // React components
 function Row(props) {
@@ -107,25 +134,60 @@ function Row(props) {
         <tr>
             <td>{props.entry.type}</td>
             <td>{props.entry.name}</td>
-            <td>{props.entry.time}</td>
+            <td>{props.entry.when}</td>
+            <td>{props.entry.toWhen}</td>
         </tr>
     )
 }
 
+/*
 function Table(props) {
     return (
         <table>
             <tbody>
-                {/* column headers */}
                 <tr>
                   <th>Type</th>
                   <th>Name</th>
-                  <th>Time</th>
+                  <th>When</th>
+                  <th>To When</th>
                 </tr>
                 {props.rows}
             </tbody>
         </table>
     )
+}
+*/
+
+class Table extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const columnHeaders = [];
+    for (let [key, header] of this.props.columnHeaders.entries()) {
+      columnHeaders.push(<th key={key}>{header}</th>);
+    }
+
+    const rows = [];
+    for (let [key, entry] of this.props.entries.entries()) {
+      entry = parseInput(entry);
+      if (entry.type === this.props.type) {
+        rows.push(<Row key={key} entry={entry} />);
+      }
+    }
+
+    return (
+      <table>
+        <tbody>
+          <tr>
+            {columnHeaders}
+          </tr>
+          {rows}
+        </tbody>
+      </table>
+    )
+  }
 }
 
 function Input(props) {
@@ -168,7 +230,8 @@ class EntrySystem extends React.Component {
     event.preventDefault();
 
     const entries = this.state.entries.slice();
-    const newEntry = parseInput(this.state.inputValue);
+    //const newEntry = parseInput(this.state.inputValue);
+    const newEntry = this.state.inputValue;
     entries.unshift(newEntry);
 
     this.setState((state) => ({
@@ -191,7 +254,10 @@ class EntrySystem extends React.Component {
         </div>
         <div className="tableContainer">
           {/* later change so that table creates rows from entries...? */}
-          <Table rows={rows} />
+          {/* <Table rows={rows} /> */}
+          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"task"}/>
+          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"event"}/>
+          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"thing"}/>
         </div>
       </div>
     )
