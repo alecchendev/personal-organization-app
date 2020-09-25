@@ -19,7 +19,87 @@ function parseInput(input) {
     return entry;
 }
 
+function reverseString(str) {
+  return str.split("").reverse().join("");
+}
 
+function parseTask(input) {
+  // cs 196 shit sep 25 1159p
+  const reversedInput = reverseString(input);
+
+  const monthRegex = /[a-z]+\s/i; // gets the first block of letters
+  const month = reverseString(reversedInput.match(monthRegex)[0].trim());
+  
+  const dayRegex = /[^\w]\d{1,2}\s/;
+  const day = reverseString(reversedInput.match(dayRegex)[0].trim());
+
+  const timeRegex = /[a-z]{1,2}\d{1,4}\s/i;
+  const time = reverseString(reversedInput.match(timeRegex)[0].trim());
+
+  const when = [month, day, time].join(" ");
+
+  const name = input.replace(when, "").trim();
+
+  const type = "task";
+
+  const task = {
+    type: type,
+    name: name,
+    when: when
+  }
+  console.log(task);
+
+  // follup on tuition friday
+
+  return task;
+}
+
+function parseEvent(input) {
+  // macs 100 lecture sep 25 10-1050a
+  const reversedInput = reverseString(input);
+
+  const monthRegex = /[a-z]+\s/i; // gets the first block of letters
+  const month = reverseString(reversedInput.match(monthRegex)[0].trim());
+
+  const dayRegex = /[^\w-]\d{1,2}\s/; // important distinction: specifices not hyphen
+  const day = reverseString(reversedInput.match(dayRegex)[0].trim());
+
+  const timeRegex = /[a-z]{1,2}\d{1,4}-\d{1,4}\s/i;
+  const time = reverseString(reversedInput.match(timeRegex)[0].trim());
+  const [time1, time2] = time.split("-");
+
+  const when = [month, day, time1].join(" ");
+  const toWhen = [month, day, time2].join(" ");
+
+  const name = input.replace([month, day, time].join(" "), "").trim();
+
+  const type = "event";
+
+  const event = {
+    type: type,
+    name: name,
+    when: when,
+    toWhen: toWhen,
+  }
+  console.log(event);
+
+  return event;
+}
+
+function parseThing(input) {
+  const name = input;
+  const type = "thing";
+  const thing = {
+    type: type,
+    name: name
+  }
+  console.log(thing);
+  return thing;
+}
+
+parseTask("cs 196 shit sep 25 1159p");
+parseEvent("macs 100 lecture sep 25 10-1050a");
+parseThing("call chris");
 
 // React components
 function Row(props) {

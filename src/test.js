@@ -85,12 +85,14 @@ ROADMAP
             - Today page is basically another set of filters, and they'll just display their specific properties
             - Every time there is an input, it will store it in entries, and the lists will just update
     - Test out getting task from input into an object
-- UI
-    - React!!! ..or vue??!
-    - Displaying the basic table
+- DONE UI
+    - DONE React!!! ..or vue??!
+    - DONE Displaying the basic table
+    - DONE Basic styling
 - Back to data
-    - Node!!!
     - Storing and reading locally
+        - SQL?? Node? Local storage?
+        - probably just store locally until things get larger - or maybe don't even store at all yet
 - Parsing input pt. 2
     - Is it a task, event, or thing?
 - Storing data pt. 2
