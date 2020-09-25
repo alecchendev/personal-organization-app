@@ -1,38 +1,61 @@
+import { render } from '@testing-library/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import {parseInput} from './test'
+// basically, just combine both into a simplified file
 
-// first commit
 
-function Entry(props) {
-  return (
-    <tr>
-      <td className="name">{props.data.name}</td>
-      <td className="time">{props.data.time}</td>
-    </tr>
-  )
-};
-
-function Table(props) {
-  return (
-    <div>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Time</th>
-        </tr>
-        {/*props*/}
-      </table>
-    </div>
-  )
+// Minimal backend code
+function parseInput(input) {
+    // parsing - current/basic form - [entryType] [task name] [month] [day] [time] - task name month day time
+    const elements = input.split(" ");
+    const [entryType, name, month, day, time] = elements;
+    const entry = {
+        type: entryType,
+        name: name,
+        time: [time, day, month].join(" ")
+    }
+    return entry;
 }
 
-function testFunction(input) {
-  const name = input;
-  const time = "testTime";
-  return {name:name, time:time};
+
+
+// React components
+function Row(props) {
+    return (
+        <tr>
+            <td>{props.entry.type}</td>
+            <td>{props.entry.name}</td>
+            <td>{props.entry.time}</td>
+        </tr>
+    )
+}
+
+function Table(props) {
+    return (
+        <table>
+            <tbody>
+                {/* column headers */}
+                <tr>
+                  <th>Type</th>
+                  <th>Name</th>
+                  <th>Time</th>
+                </tr>
+                {props.rows}
+            </tbody>
+        </table>
+    )
+}
+
+function Input(props) {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <label>
+                <input type="text" value={props.value} onChange={props.handleChange}/>
+            </label>
+        </form>
+    )
 }
 
 class EntrySystem extends React.Component {
@@ -41,13 +64,11 @@ class EntrySystem extends React.Component {
     this.state = {
       inputValue: "",
       columnNames: [
-        
+        "type",
+        "name",
+        "type"
       ],
       entries: [
-        {
-          name: "testName",
-          time: "testTime"
-        }
       ]
     }
     this.handleChange = this.handleChange.bind(this);
@@ -55,64 +76,42 @@ class EntrySystem extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({
-      inputValue: event.target.value,
-      columnNames: this.state.columnNames,
-      entries: this.state.entries
-    })
+    const inputValue = event.target.value;
+    this.setState((state) => ({
+      inputValue: inputValue,
+      columnNames: state.columnNames,
+      entries: state.entries
+    }))
   }
-
 
   handleSubmit(event) {
-    //event.preventDefault();
-    // Update list of entries
-    const entries = this.state.entries.slice();
-    //entries.unshift(this.parseInput(this.state.inputValue));
-    const newEntry = parseInput(this.state.inputValue);
-    console.log(newEntry);
-    entries.unshift(newEntry);
-    this.setState({
-      inputValue: this.state.inputValue,
-      columnNames: this.state.columnNames,
-      entries: entries
-    })
-    console.log(entries);
-    //alert(event.target.value);
-    // empty the input box
     event.preventDefault();
-  }
 
-  parseInput(input) {
-    const name = input;
-    const time = "testTime";
-    return {name:name, time:time};
+    const entries = this.state.entries.slice();
+    const newEntry = parseInput(this.state.inputValue);
+    entries.unshift(newEntry);
+
+    this.setState((state) => ({
+      inputValue: "",
+      columnnames: this.state.columnNames,
+      entries: entries
+    }))
   }
   
   render() {
-
-
     const rows = [];
-    for (const [index, entry] of this.state.entries.entries()) {
-      rows.push(<Entry key={index} data={entry}/>)
+    for (const [key, entry] of this.state.entries.entries()) {
+      rows.push(<Row key={key} entry={entry}/>)
     }
 
     return (
-      <div>
+      <div className="entrySystem">
         <div className="formContainer">
-          <form onSubmit={(event) => this.handleSubmit(event)}>
-            <label>
-              <input type="text" onChange={(event) => this.handleChange(event)}/>
-            </label>
-            <input type="submit"/>
-          </form>
+          <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
         </div>
         <div className="tableContainer">
-          {/*<Table props={rows} />*/}
-          <table>
-            <tbody>
-              {rows}
-            </tbody>
-          </table>
+          {/* later change so that table creates rows from entries...? */}
+          <Table rows={rows} />
         </div>
       </div>
     )
