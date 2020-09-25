@@ -5,12 +5,9 @@ import './index.css';
 
 // basically, just combine both into a simplified file
 
-parseInput("task cs 196 shit sep 25 1159p");
+parseInput("task cs 196 stuff sep 25 1159p");
 parseInput("event macs 100 lecture sep 25 10-1050a");
 parseInput("thing call chris");
-//parseTask("cs 196 shit sep 25 1159p");
-//parseEvent("macs 100 lecture sep 25 10-1050a");
-//parseThing("call chris");
 
 // Minimal backend code
 function parseInput(input) {
@@ -129,34 +126,14 @@ function parseThing(input) {
 }
 
 // React components
-function Row(props) {
-    return (
-        <tr>
-            <td>{props.entry.type}</td>
-            <td>{props.entry.name}</td>
-            <td>{props.entry.when}</td>
-            <td>{props.entry.toWhen}</td>
-        </tr>
-    )
-}
 
-/*
-function Table(props) {
-    return (
-        <table>
-            <tbody>
-                <tr>
-                  <th>Type</th>
-                  <th>Name</th>
-                  <th>When</th>
-                  <th>To When</th>
-                </tr>
-                {props.rows}
-            </tbody>
-        </table>
-    )
+function Row(props) {
+  return (
+    <tr>
+      {props.data}
+    </tr>
+  )
 }
-*/
 
 class Table extends React.Component {
   constructor(props) {
@@ -164,25 +141,29 @@ class Table extends React.Component {
   }
 
   render() {
+    const columnKey = "columnHeader";
     const columnHeaders = [];
     for (let [key, header] of this.props.columnHeaders.entries()) {
       columnHeaders.push(<th key={key}>{header}</th>);
     }
 
     const rows = [];
-    for (let [key, entry] of this.props.entries.entries()) {
+    rows.push(<Row key={columnKey} data={columnHeaders} />);
+
+    for (let [rowKey, entry] of this.props.entries.entries()) {
       entry = parseInput(entry);
       if (entry.type === this.props.type) {
-        rows.push(<Row key={key} entry={entry} />);
+        const rowData = [];
+        for (let [dataKey, entryProp] of Object.keys(entry).entries()) {
+          rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
+        }
+        rows.push(<Row key={rowKey} data={rowData} />);
       }
     }
 
     return (
       <table>
         <tbody>
-          <tr>
-            {columnHeaders}
-          </tr>
           {rows}
         </tbody>
       </table>
