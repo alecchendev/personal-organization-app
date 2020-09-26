@@ -154,7 +154,8 @@ class Table extends React.Component {
       entry = parseInput(entry);
       if (entry.type === this.props.type) {
         const rowData = [];
-        for (let [dataKey, entryProp] of Object.keys(entry).entries()) {
+        for (let [dataKey, entryProp] of this.props.columnHeaders.entries()) {
+          console.log(entryProp);
           rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
         }
         rows.push(<Row key={rowKey} data={rowData} />);
@@ -236,9 +237,9 @@ class EntrySystem extends React.Component {
         <div className="tableContainer">
           {/* later change so that table creates rows from entries...? */}
           {/* <Table rows={rows} /> */}
-          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"task"}/>
-          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"event"}/>
-          <Table columnHeaders={["Type", "Name", "When", "To When"]} entries={this.state.entries} type={"thing"}/>
+          <Table columnHeaders={["type", "name", "when"]} entries={this.state.entries} type={"task"}/>
+          <Table columnHeaders={["type", "name", "when", "to when"]} entries={this.state.entries} type={"event"}/>
+          <Table columnHeaders={["type", "name"]} entries={this.state.entries} type={"thing"}/>
         </div>
       </div>
     )
