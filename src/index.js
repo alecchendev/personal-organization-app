@@ -130,7 +130,7 @@ function parseThing(input) {
 function Row(props) {
   return (
     <tr>
-      <td className="checkboxContainer"><input type="checkbox" className="checkbox" /></td>
+      <td className="checkboxContainer" onClick={props.onClick}><input type="checkbox" className="checkbox" /></td>
       {props.data}
       <td className="deleteContainer"><input type="checkbox" className="deletebox" /></td>
     </tr>
@@ -138,6 +138,7 @@ function Row(props) {
 }
 
 // eventually make columns and row entries separate things
+// also take a filter object as a prop and use it to compare entries
 
 class Table extends React.Component {
   constructor(props) {
@@ -152,11 +153,11 @@ class Table extends React.Component {
     }
 
     const rows = [];
-    rows.push(<Row key={columnKey} data={columnHeaders} />);
+    rows.push(<Row key={columnKey} data={columnHeaders} onClick={this.props.onClick}/>);
 
     for (let [rowKey, entry] of this.props.entries.entries()) {
       entry = parseInput(entry);
-      if (entry.type === this.props.type) {
+      if (this.props.type.includes(entry.type)) {
         const rowData = [];
         for (let [dataKey, entryProp] of this.props.values.entries()) {
           rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
@@ -166,11 +167,14 @@ class Table extends React.Component {
     }
 
     return (
-      <table>
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
+      <div>
+        <h3 className="tableTitle">{this.props.title}</h3>
+        <table>
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+      </div>
     )
   }
 }
@@ -190,16 +194,12 @@ class EntrySystem extends React.Component {
     super(props);
     this.state = {
       inputValue: "",
-      columnNames: [
-        "type",
-        "name",
-        "type"
-      ],
       entries: [
       ]
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(event) {
@@ -225,24 +225,31 @@ class EntrySystem extends React.Component {
       entries: entries
     }))
   }
+
+  handleClick(event) {
+    console.log("ooga booga");
+    console.log(event.target.checked);
+  }
   
   render() {
-    const rows = [];
-    for (const [key, entry] of this.state.entries.entries()) {
-      rows.push(<Row key={key} entry={entry}/>)
-    }
 
     return (
       <div className="entrySystem">
-        <div className="formContainer">
-          <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+      <div className="formTableContainer">
+          <div className="formContainer">
+            <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+          </div>
+          <div className="tableContainer">
+            {/* later change so that table creates rows from entries...? */}
+            {/* <Table rows={rows} /> */}
+            <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} onClick={this.handleClick}/>
+            <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"}/>
+            <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"}/>
+          </div>
         </div>
-        <div className="tableContainer">
-          {/* later change so that table creates rows from entries...? */}
-          {/* <Table rows={rows} /> */}
-          <Table columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"}/>
-          <Table columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"}/>
-          <Table columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"}/>
+        <div className="tableContainer2">
+          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]}/>
+          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]}/>
         </div>
       </div>
     )
@@ -250,7 +257,24 @@ class EntrySystem extends React.Component {
 
 }
 
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="pageTitle">
+          <h1>Page Title</h1>
+        </div>
+        <EntrySystem />
+      </div>
+    )
+  }
+}
+
 ReactDOM.render(
-  <EntrySystem />, 
+  <Page />, 
   document.getElementById('root')
 );

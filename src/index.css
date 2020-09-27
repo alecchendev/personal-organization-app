@@ -21,7 +21,7 @@ form {
 }
 
 input {
-  width: 41%;
+  width: 65%;
 }
 
 input:focus {
@@ -30,8 +30,8 @@ input:focus {
 
 table {
   margin: auto;
-  margin-top: 10px;
-  width: 50%;
+  margin-bottom: 20px;
+  width: 75%;
   text-align: left;
   border-collapse: collapse;
 }
@@ -39,13 +39,24 @@ table {
 th, td {
   padding: 10px;
   border: 1px solid #e0e0e0;
+  font-weight: normal;
 }
 
-.entrySystem {
+.formTableContainer {
   width: 50%;
-  position: relative;
+  position: inline-block;
+  float: right;
+  /*
   left: 50%;
+  
   background-color: whitesmoke;
+  */
+}
+
+.tableContainer2 {
+  width: 50%;
+  position: inline-block;
+  float: left;
 }
 
 .checkboxContainer, .deleteContainer {
@@ -63,4 +74,15 @@ th, td {
 
 .deleteContainer:hover .deletebox {
   visibility: visible;
+}
+
+.tableTitle {
+  margin: 0px 0px 0px 17%;
+  text-align: left;
+  font-weight: normal;
+}
+
+.pageTitle {
+  margin-left: 8%;
+  font-size: 30px;
 }
