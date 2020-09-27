@@ -130,10 +130,14 @@ function parseThing(input) {
 function Row(props) {
   return (
     <tr>
+      <td className="checkboxContainer"><input type="checkbox" className="checkbox" /></td>
       {props.data}
+      <td className="deleteContainer"><input type="checkbox" className="deletebox" /></td>
     </tr>
   )
 }
+
+// eventually make columns and row entries separate things
 
 class Table extends React.Component {
   constructor(props) {
@@ -154,8 +158,7 @@ class Table extends React.Component {
       entry = parseInput(entry);
       if (entry.type === this.props.type) {
         const rowData = [];
-        for (let [dataKey, entryProp] of this.props.columnHeaders.entries()) {
-          console.log(entryProp);
+        for (let [dataKey, entryProp] of this.props.values.entries()) {
           rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
         }
         rows.push(<Row key={rowKey} data={rowData} />);
@@ -237,9 +240,9 @@ class EntrySystem extends React.Component {
         <div className="tableContainer">
           {/* later change so that table creates rows from entries...? */}
           {/* <Table rows={rows} /> */}
-          <Table columnHeaders={["type", "name", "when"]} entries={this.state.entries} type={"task"}/>
-          <Table columnHeaders={["type", "name", "when", "to when"]} entries={this.state.entries} type={"event"}/>
-          <Table columnHeaders={["type", "name"]} entries={this.state.entries} type={"thing"}/>
+          <Table columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"}/>
+          <Table columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"}/>
+          <Table columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"}/>
         </div>
       </div>
     )
