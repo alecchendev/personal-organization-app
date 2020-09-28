@@ -162,6 +162,21 @@ class Table extends React.Component {
     const rows = [];
     rows.push(<Row key={columnKey} data={columnHeaders} />);
 
+    // newer filtering
+    //let checkObjKeyEqual = (objKey) => this.props.filter[objKey] === entry[objKey];
+    let filterFunc = (entry) => Object.keys(this.props.filter).every((objKey) => this.props.filter[objKey] === entry[objKey]);
+
+    const addEntries = this.props.entries.filter(filterFunc);
+    //console.log(this.props.title, addEntries);
+    for (let [rowKey, entry] of addEntries.entries()) {
+      const rowData = [];
+      for (let [dataKey, entryProp] of this.props.values.entries()) {
+        rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
+      }
+      rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index} checked={entry.checked} />);
+    }
+
+    /*
     for (let [rowKey, entry] of this.props.entries.entries()) {
       //entry = parseInput(entry);
 
@@ -177,6 +192,7 @@ class Table extends React.Component {
       }
 
     }
+    */
 
     return (
       <div>
