@@ -25,6 +25,7 @@ function parseInput(input) {
     entryData = parseType[type](elements.join(" "));
   } catch {
     entryData = {
+      checked: false,
       type: "",
       name: "",
       when: "",
@@ -32,14 +33,21 @@ function parseInput(input) {
     }
   }
   const entry = {};
-  const entryProps = ["type", "name", "when", "toWhen"];
+  const entryProps = ["checked", "type", "name", "when", "toWhen"];
+  const entryDefaultValues = {
+    checked: false,
+    type: "",
+    name: "",
+    when: "",
+    toWhen: ""
+  }
 
   for (let index in entryProps) {
     const prop = entryProps[index];
     if (entryData.hasOwnProperty(prop)) {
       entry[prop] = entryData[prop];
     } else {
-      entry[prop] = "";
+      entry[prop] = entryDefaultValues[prop];
     }
   }
 
@@ -137,8 +145,7 @@ function Row(props) {
   )
 }
 
-// eventually make columns and row entries separate things
-// also take a filter object as a prop and use it to compare entries
+// eventually put the parsing back into the entrysystem component
 
 class Table extends React.Component {
   constructor(props) {
@@ -153,10 +160,24 @@ class Table extends React.Component {
     }
 
     const rows = [];
-    rows.push(<Row key={columnKey} data={columnHeaders} onClick={this.props.onClick}/>);
+    rows.push(<Row key={columnKey} data={columnHeaders} />);
 
     for (let [rowKey, entry] of this.props.entries.entries()) {
       entry = parseInput(entry);
+
+      // new filtering
+      let filterFunc = (objKey) => this.props.filter[objKey] === entry[objKey];
+      let addEntry = Object.keys(this.props.filter).every(filterFunc);
+      if (addEntry) {
+        const rowData = [];
+        for (let [dataKey, entryProp] of this.props.values.entries()) {
+          rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
+        }
+        rows.push(<Row key={rowKey} data={rowData} onClick={this.props.onClick}/>);
+      }
+
+      // old filtering
+      /*
       if (this.props.type.includes(entry.type)) {
         const rowData = [];
         for (let [dataKey, entryProp] of this.props.values.entries()) {
@@ -164,6 +185,7 @@ class Table extends React.Component {
         }
         rows.push(<Row key={rowKey} data={rowData} />);
       }
+      */
     }
 
     return (
@@ -232,7 +254,27 @@ class EntrySystem extends React.Component {
   }
   
   render() {
-
+    const taskFilter = {
+      checked: false,
+      type: "task",
+      toWhen: ""
+    }
+    const eventFilter = {
+      checked: false,
+      type: "event"
+    }
+    const thingFilter = {
+      checked: false,
+      type: "thing",
+      when: "",
+      toWhen: ""
+    }
+    const todoFilter = {
+      checked: false
+    }
+    const logFilter = {
+      checked: true
+    }
     return (
       <div className="entrySystem">
       <div className="formTableContainer">
@@ -242,14 +284,14 @@ class EntrySystem extends React.Component {
           <div className="tableContainer">
             {/* later change so that table creates rows from entries...? */}
             {/* <Table rows={rows} /> */}
-            <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} onClick={this.handleClick}/>
-            <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"}/>
-            <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"}/>
+            <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick}/>
+            <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} />
+            <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter}/>
           </div>
         </div>
         <div className="tableContainer2">
-          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]}/>
-          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]}/>
+          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter}/>
+          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter}/>
         </div>
       </div>
     )
