@@ -163,7 +163,7 @@ class Table extends React.Component {
     rows.push(<Row key={columnKey} data={columnHeaders} />);
 
     for (let [rowKey, entry] of this.props.entries.entries()) {
-      entry = parseInput(entry);
+      //entry = parseInput(entry);
 
       // new filtering
       let filterFunc = (objKey) => this.props.filter[objKey] === entry[objKey];
@@ -173,19 +173,9 @@ class Table extends React.Component {
         for (let [dataKey, entryProp] of this.props.values.entries()) {
           rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
         }
-        rows.push(<Row key={rowKey} data={rowData} onClick={this.props.onClick}/>);
+        rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick}/>);
       }
 
-      // old filtering
-      /*
-      if (this.props.type.includes(entry.type)) {
-        const rowData = [];
-        for (let [dataKey, entryProp] of this.props.values.entries()) {
-          rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
-        }
-        rows.push(<Row key={rowKey} data={rowData} />);
-      }
-      */
     }
 
     return (
@@ -216,6 +206,7 @@ class EntrySystem extends React.Component {
     super(props);
     this.state = {
       inputValue: "",
+      nextIndex: 0,
       entries: [
       ]
     }
@@ -237,19 +228,23 @@ class EntrySystem extends React.Component {
     event.preventDefault();
 
     const entries = this.state.entries.slice();
-    //const newEntry = parseInput(this.state.inputValue);
-    const newEntry = this.state.inputValue;
+    const newEntry = parseInput(this.state.inputValue);
+    newEntry.index = this.state.nextIndex;
+    console.log(newEntry);
+    
+    //const newEntry = this.state.inputValue;
     entries.unshift(newEntry);
 
     this.setState((state) => ({
       inputValue: "",
-      columnnames: this.state.columnNames,
+      nextIndex: state.nextIndex + 1,
       entries: entries
     }))
   }
 
   handleClick(event) {
-    console.log("ooga booga");
+    //console.log(index);
+    console.log(event);
     console.log(event.target.checked);
   }
   
