@@ -138,7 +138,7 @@ function parseThing(input) {
 function Row(props) {
   return (
     <tr>
-      <td className="checkboxContainer" onClick={props.onClick}><input type="checkbox" className="checkbox" /></td>
+      <td className="checkboxContainer" ><input type="checkbox" className="checkbox" onClick={(event) => props.onClick(props.index, event)}/></td>
       {props.data}
       <td className="deleteContainer"><input type="checkbox" className="deletebox" /></td>
     </tr>
@@ -173,7 +173,7 @@ class Table extends React.Component {
         for (let [dataKey, entryProp] of this.props.values.entries()) {
           rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
         }
-        rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick}/>);
+        rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index}/>);
       }
 
     }
@@ -242,10 +242,10 @@ class EntrySystem extends React.Component {
     }))
   }
 
-  handleClick(event) {
-    //console.log(index);
-    console.log(event);
+  handleClick(index, event) {
+    console.log(index);
     console.log(event.target.checked);
+    
   }
   
   render() {
