@@ -163,7 +163,7 @@ class Table extends React.Component {
     rows.push(<Row key={columnKey} data={columnHeaders} />);
 
     let filterFunc = (entry) => Object.keys(this.props.filter).every((objKey) => this.props.filter[objKey] === entry[objKey]);
-    const addEntries = this.props.entries.filter(filterFunc);
+    const addEntries = Object.values(this.props.entries).filter(filterFunc);
 
     for (let [rowKey, entry] of addEntries.entries()) {
       const rowData = [];
@@ -172,7 +172,7 @@ class Table extends React.Component {
       }
       rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index} checked={entry.checked} />);
     }
-
+    
     return (
       <div>
         <h3 className="tableTitle">{this.props.title}</h3>
@@ -202,8 +202,8 @@ class EntrySystem extends React.Component {
     this.state = {
       inputValue: "",
       nextIndex: 0,
-      entries: [
-      ]
+      entries: {
+      }
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -221,13 +221,10 @@ class EntrySystem extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const entries = this.state.entries.slice();
+    const entries = {...this.state.entries}; // copy
     const newEntry = parseInput(this.state.inputValue);
     newEntry.index = this.state.nextIndex;
-    console.log(newEntry);
-    
-    entries.unshift(newEntry);
-
+    entries[this.state.nextIndex] = newEntry;
     this.setState((state) => ({
       inputValue: "",
       nextIndex: state.nextIndex + 1,
@@ -238,18 +235,18 @@ class EntrySystem extends React.Component {
   handleClick(index, event) {
     console.log(index);
     console.log(event.target.checked);
-    for (const [key, entry] of this.state.entries.entries()) {
-      if (entry.index === index) {
-        const entries = this.state.entries.slice();
-        const newEntry = entry;
-        newEntry.checked = event.target.checked;
-        entries[key] = newEntry;
-        this.setState((state) => ({
-          entries: entries
-        }))
-        break;
-      }
-    }
+    const entry = this.state.entries[index];
+    const entries = {...this.state.entries};
+    const newEntry = entry;
+    newEntry.checked = event.target.checked;
+    entries[index] = newEntry;
+    this.setState((state) => ({
+      entries: entries
+    }))
+  }
+
+  handleDelete(index, event) {
+
   }
   
   render() {
