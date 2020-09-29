@@ -14,6 +14,23 @@ code {
 
 /* my style */
 
+/* general layout */
+.formTableContainer {
+  width: 50%;
+  float: right;
+}
+
+.tableContainer2 {
+  width: 50%;
+  float: left;
+}
+
+.pageTitle {
+  margin-left: 8.25%;
+  font-size: 30px;
+}
+
+/* text input box */
 form {
   margin: 10px 0px 10px 0px;
   background-color: white;
@@ -21,11 +38,18 @@ form {
 }
 
 input {
-  width: 65%;
+  width: 65.75%;
 }
 
 input:focus {
   outline: none;
+}
+
+/* tables */
+.tableTitle {
+  text-align: left;
+  margin: 0px 0px 0px 16.5%;
+  font-weight: normal;
 }
 
 table {
@@ -42,23 +66,7 @@ th, td {
   font-weight: normal;
 }
 
-.formTableContainer {
-  width: 50%;
-  position: inline-block;
-  float: right;
-  /*
-  left: 50%;
-  
-  background-color: whitesmoke;
-  */
-}
-
-.tableContainer2 {
-  width: 50%;
-  position: inline-block;
-  float: left;
-}
-
+/* checkboxes */
 .checkboxContainer, .deleteContainer {
   border: 0px;
   width: 20px;
@@ -74,15 +82,4 @@ th, td {
 
 .deleteContainer:hover .deletebox {
   visibility: visible;
-}
-
-.tableTitle {
-  margin: 0px 0px 0px 17%;
-  text-align: left;
-  font-weight: normal;
-}
-
-.pageTitle {
-  margin-left: 8%;
-  font-size: 30px;
 }

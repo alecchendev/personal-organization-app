@@ -162,12 +162,9 @@ class Table extends React.Component {
     const rows = [];
     rows.push(<Row key={columnKey} data={columnHeaders} />);
 
-    // newer filtering
-    //let checkObjKeyEqual = (objKey) => this.props.filter[objKey] === entry[objKey];
     let filterFunc = (entry) => Object.keys(this.props.filter).every((objKey) => this.props.filter[objKey] === entry[objKey]);
-
     const addEntries = this.props.entries.filter(filterFunc);
-    //console.log(this.props.title, addEntries);
+
     for (let [rowKey, entry] of addEntries.entries()) {
       const rowData = [];
       for (let [dataKey, entryProp] of this.props.values.entries()) {
@@ -175,24 +172,6 @@ class Table extends React.Component {
       }
       rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index} checked={entry.checked} />);
     }
-
-    /*
-    for (let [rowKey, entry] of this.props.entries.entries()) {
-      //entry = parseInput(entry);
-
-      // new filtering
-      let filterFunc = (objKey) => this.props.filter[objKey] === entry[objKey];
-      let addEntry = Object.keys(this.props.filter).every(filterFunc);
-      if (addEntry) {
-        const rowData = [];
-        for (let [dataKey, entryProp] of this.props.values.entries()) {
-          rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
-        }
-        rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index} checked={entry.checked} />);
-      }
-
-    }
-    */
 
     return (
       <div>
@@ -247,7 +226,6 @@ class EntrySystem extends React.Component {
     newEntry.index = this.state.nextIndex;
     console.log(newEntry);
     
-    //const newEntry = this.state.inputValue;
     entries.unshift(newEntry);
 
     this.setState((state) => ({
@@ -299,21 +277,15 @@ class EntrySystem extends React.Component {
     return (
       <div className="entrySystem">
       <div className="formTableContainer">
-          <div className="formContainer">
-            <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-          </div>
-          <div className="tableContainer">
-            {/* later change so that table creates rows from entries...? */}
-            {/* <Table rows={rows} /> */}
-            <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick}/>
-            <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} />
-            <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick}/>
-          </div>
-        </div>
-        <div className="tableContainer2">
-          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick}/>
-          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick}/>
-        </div>
+        <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+        <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick}/>
+        <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} />
+        <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick}/>
+      </div>
+      <div className="tableContainer2">
+        <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick}/>
+        <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick}/>
+      </div>
       </div>
     )
   }

@@ -89,12 +89,18 @@ ROADMAP
     - DONE React!!! ..or vue??!
     - DONE Displaying the basic table
     - DONE Basic styling
+- More ui and table work
+    - More/simplify styling
+    - DONE Checkboxes for checking off and deletion
+    - DONE Checking off
+    - Deletion
+    - DONE Filtering/linked database work
 - Back to data
     - Storing and reading locally
         - SQL?? Node? Local storage?
         - probably just store locally until things get larger - or maybe don't even store at all yet
 - Parsing input pt. 2
-    - Is it a task, event, or thing?
+    - DONE Is it a task, event, or thing?
 - Storing data pt. 2
     - Tasks vs events vs things - probably just make 3 of the same type of thing
     - Store new data
