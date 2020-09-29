@@ -140,7 +140,7 @@ function Row(props) {
     <tr>
       <td className="checkboxContainer" ><input type="checkbox" className="checkbox" onClick={(event) => props.onClick(props.index, event)} defaultChecked={props.checked}/></td>
       {props.data}
-      <td className="deleteContainer"><input type="checkbox" className="deletebox" /></td>
+      <td className="deleteContainer"><input type="checkbox" className="deletebox" onClick={(event) => props.onDelete(props.index, event)} /></td>
     </tr>
   )
 }
@@ -170,7 +170,7 @@ class Table extends React.Component {
       for (let [dataKey, entryProp] of this.props.values.entries()) {
         rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
       }
-      rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} index={entry.index} checked={entry.checked} />);
+      rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} onDelete={this.props.onDelete} index={entry.index} checked={entry.checked} />);
     }
     
     return (
@@ -208,6 +208,7 @@ class EntrySystem extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleChange(event) {
@@ -246,7 +247,11 @@ class EntrySystem extends React.Component {
   }
 
   handleDelete(index, event) {
-
+    const entries = {...this.state.entries};
+    delete entries[index];
+    this.setState((state) => ({
+      entries: entries
+    }))
   }
   
   render() {
@@ -275,13 +280,13 @@ class EntrySystem extends React.Component {
       <div className="entrySystem">
       <div className="formTableContainer">
         <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-        <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick}/>
-        <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} />
-        <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick}/>
+        <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+        <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+        <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
       </div>
       <div className="tableContainer2">
-        <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick}/>
-        <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick}/>
+        <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+        <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
       </div>
       </div>
     )
