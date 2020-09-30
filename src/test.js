@@ -1,4 +1,5 @@
 
+
 /*
 let vueTest = new Vue({
     el: '#app',
@@ -128,7 +129,7 @@ function storeData(object) {
 
 // takes in a string input, separates task name from time from other elements and outputs an object of a new task, event, thing, etc
 //function parseInput(input) {
-export const parseInput = (input) => {
+const parseInput = (input) => {
     /*
     const today = new Date()
     const tomorrow = new Date(today)
