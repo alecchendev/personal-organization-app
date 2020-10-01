@@ -2,12 +2,12 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+//import {readJson} from './backend';
+//const fileSync = require('fs');
+//readJson();
+
 
 // basically, just combine both into a simplified file
-
-parseInput("task cs 196 stuff sep 25 1159p");
-parseInput("event macs 100 lecture sep 25 10-1050a");
-parseInput("thing call chris");
 
 // Minimal backend code
 function parseInput(input) {
