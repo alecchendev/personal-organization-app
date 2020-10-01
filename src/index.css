@@ -14,19 +14,36 @@ code {
 
 /* my style */
 
+/* variables */
+:root {
+  --checkbox-width: 20px;
+  --table-width: 75%;
+}
+
 /* general layout */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.entrySystemContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+}
+
 .formTableContainer {
-  width: 50%;
-  float: right;
+  display: flex;
+  flex-direction: column;
 }
 
 .tableContainer2 {
-  width: 50%;
-  float: left;
+  display: flex;
+  flex-direction: column;
 }
 
 .pageTitle {
-  margin-left: 8.25%;
+  margin-left: calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 4);
   font-size: 30px;
 }
 
@@ -38,7 +55,7 @@ form {
 }
 
 input {
-  width: 65.75%;
+  width: calc(var(--checkbox-width) * 4 * -1 + var(--table-width));
 }
 
 input:focus {
@@ -46,16 +63,23 @@ input:focus {
 }
 
 /* tables */
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 50vw;
+}
+
 .tableTitle {
   text-align: left;
-  margin: 0px 0px 0px 16.5%;
+  margin: 0px 0px 0px calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 2);
   font-weight: normal;
 }
 
 table {
   margin: auto;
   margin-bottom: 20px;
-  width: 75%;
+  width: var(--table-width);
   text-align: left;
   border-collapse: collapse;
 }
@@ -69,7 +93,7 @@ th, td {
 /* checkboxes */
 .checkboxContainer, .deleteContainer {
   border: 0px;
-  width: 20px;
+  width: var(--checkbox-width);
 }
 
 .checkbox, .deletebox {

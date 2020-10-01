@@ -174,7 +174,7 @@ class Table extends React.Component {
     }
     
     return (
-      <div>
+      <div className="tableContainer">
         <h3 className="tableTitle">{this.props.title}</h3>
         <table>
           <tbody>
@@ -277,17 +277,17 @@ class EntrySystem extends React.Component {
       checked: true
     }
     return (
-      <div className="entrySystem">
-      <div className="formTableContainer">
-        <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-        <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-        <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-        <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-      </div>
-      <div className="tableContainer2">
-        <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-        <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-      </div>
+      <div className="entrySystemContainer">
+        <div className="formTableContainer">
+          <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
+          <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+          <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+          <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+        </div>
+        <div className="tableContainer2">
+          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
+        </div>
       </div>
     )
   }
@@ -301,7 +301,7 @@ class Page extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="pageContainer">
         <div className="pageTitle">
           <h1>Page Title</h1>
         </div>
