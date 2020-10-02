@@ -13,33 +13,20 @@ code {
 }
 
 /* my style */
-
-/* variables */
 :root {
-  --checkbox-width: 20px;
   --table-width: 75%;
+  --checkbox-width: 20px;
 }
 
 /* general layout */
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.entrySystemContainer {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-evenly;
-}
-
 .formTableContainer {
-  display: flex;
-  flex-direction: column;
+  width: 50vw;
+  float: right;
 }
 
 .tableContainer2 {
-  display: flex;
-  flex-direction: column;
+  width: 50vw;
+  float: left;
 }
 
 .pageTitle {
@@ -55,7 +42,7 @@ form {
 }
 
 input {
-  width: calc(var(--checkbox-width) * 4 * -1 + var(--table-width));
+  width: calc(var(--table-width) - 4 * var(--checkbox-width));
 }
 
 input:focus {
@@ -63,16 +50,10 @@ input:focus {
 }
 
 /* tables */
-.tableContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 50vw;
-}
-
 .tableTitle {
   text-align: left;
-  margin: 0px 0px 0px calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 2);
+  margin: 0;
+  margin-left: calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 2);
   font-weight: normal;
 }
 

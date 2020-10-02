@@ -14,4 +14,10 @@ function readJson() {
     console.log(typeof(dataObj));
 }
 
-readJson()
+function writeJson(jsonName, jsonObj) {
+    let data = JSON.stringify(jsonObj);
+    fileSync.writeFileSync(jsonName, data);
+}
+
+readJson();
+writeJson("writeData.json", {name:"john", age:12});
