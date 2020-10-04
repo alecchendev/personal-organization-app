@@ -297,6 +297,18 @@ class EntrySystem extends React.Component {
 class Page extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { apiResponse: "" };
+  }
+
+  callAPI() {
+    fetch("http://localhost:9000/testAPI")
+      .then(res => res.text())
+      .then(res => this.setState({ apiResponse: res }))
+      .catch(err => err);
+  }
+
+  componentDidMount() {
+    this.callAPI();
   }
 
   render() {
@@ -304,6 +316,7 @@ class Page extends React.Component {
       <div className="pageContainer">
         <div className="pageTitle">
           <h1>Page Title</h1>
+          <p>{this.state.apiResponse}</p>
         </div>
         <EntrySystem />
       </div>

@@ -1,6 +1,7 @@
 
 //export {readJson};
 
+/*
 const fileSync = require("fs");
 
 function dummyFunction() {
@@ -21,3 +22,4 @@ function writeJson(jsonName, jsonObj) {
 
 readJson();
 writeJson("writeData.json", {name:"john", age:12});
+*/
