@@ -15,7 +15,8 @@ code {
 /* my style */
 :root {
   --table-width: 75%;
-  --checkbox-width: 20px;
+  --table-cell-height: 10px;
+  --checkbox-width: 10px;
 }
 
 /* general layout */
@@ -30,7 +31,7 @@ code {
 }
 
 .pageTitle {
-  margin-left: calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 4);
+  margin-left: calc(var(--checkbox-width) * 4 + (100% - var(--table-width)) / 4);
   font-size: 30px;
 }
 
@@ -42,7 +43,7 @@ form {
 }
 
 input {
-  width: calc(var(--table-width) - 4 * var(--checkbox-width));
+  width: calc(var(--table-width) - 8 * var(--checkbox-width));
 }
 
 input:focus {
@@ -53,7 +54,7 @@ input:focus {
 .tableTitle {
   text-align: left;
   margin: 0;
-  margin-left: calc(var(--checkbox-width) * 2 + (100% - var(--table-width)) / 2);
+  margin-left: calc(var(--checkbox-width) * 4 + (100% - var(--table-width)) / 2);
   font-weight: normal;
 }
 
@@ -78,6 +79,7 @@ th, td {
 }
 
 .checkbox, .deletebox {
+  width: var(--checkbox-width);
   visibility: hidden;
 }
 

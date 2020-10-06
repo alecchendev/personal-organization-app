@@ -316,7 +316,7 @@ class Page extends React.Component {
       <div className="pageContainer">
         <div className="pageTitle">
           <h1>Page Title</h1>
-          <p>{this.state.apiResponse}</p>
+          {/*<p>{this.state.apiResponse}</p>*/}
         </div>
         <EntrySystem />
       </div>
