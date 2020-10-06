@@ -1,5 +1,5 @@
 # Personal Organization Project
----
+
 ### Motivation
 I've tried my hand at many productivity tools, and currently I've settled on Notion (surprise!) but there are still something's that I would prefer. Notion is by far the most powerful, customizable, most versatile organization management tool out there, but at the cost of speed. Here are the problems I currently have with Notion, and how I'm trying to solve them in my project:
 
