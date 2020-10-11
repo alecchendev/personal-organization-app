@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 //import {readJson} from './backend';
@@ -147,43 +147,37 @@ function Row(props) {
 
 // eventually put the parsing back into the entrysystem component
 
-class Table extends React.Component {
-  constructor(props) {
-    super(props);
+function Table(props) {
+  const columnKey = "columnHeader";
+  const columnHeaders = [];
+  for (let [key, header] of props.columnHeaders.entries()) {
+    columnHeaders.push(<th key={key}>{header}</th>);
   }
 
-  render() {
-    const columnKey = "columnHeader";
-    const columnHeaders = [];
-    for (let [key, header] of this.props.columnHeaders.entries()) {
-      columnHeaders.push(<th key={key}>{header}</th>);
+  const rows = [];
+  rows.push(<Row key={columnKey} data={columnHeaders} />);
+
+  let filterFunc = (entry) => Object.keys(props.filter).every((objKey) => props.filter[objKey] === entry[objKey]);
+  const addEntries = Object.values(props.entries).filter(filterFunc);
+
+  for (let [rowKey, entry] of addEntries.entries()) {
+    const rowData = [];
+    for (let [dataKey, entryProp] of props.values.entries()) {
+      rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
     }
-
-    const rows = [];
-    rows.push(<Row key={columnKey} data={columnHeaders} />);
-
-    let filterFunc = (entry) => Object.keys(this.props.filter).every((objKey) => this.props.filter[objKey] === entry[objKey]);
-    const addEntries = Object.values(this.props.entries).filter(filterFunc);
-
-    for (let [rowKey, entry] of addEntries.entries()) {
-      const rowData = [];
-      for (let [dataKey, entryProp] of this.props.values.entries()) {
-        rowData.push(<td key={dataKey}>{entry[entryProp]}</td>);
-      }
-      rows.push(<Row key={entry.index} data={rowData} onClick={this.props.onClick} onDelete={this.props.onDelete} index={entry.index} checked={entry.checked} />);
-    }
-    
-    return (
-      <div className="tableContainer">
-        <h3 className="tableTitle">{this.props.title}</h3>
-        <table>
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-      </div>
-    )
+    rows.push(<Row key={entry.index} data={rowData} onClick={props.onClick} onDelete={props.onDelete} index={entry.index} checked={entry.checked} />);
   }
+  
+  return (
+    <div className="tableContainer">
+      <h3 className="tableTitle">{props.title}</h3>
+      <table>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 function Input(props) {
@@ -196,132 +190,103 @@ function Input(props) {
     )
 }
 
-class EntrySystem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputValue: "",
-      nextIndex: 0,
-      entries: {
-      }
-    }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+function EntrySystem() {
+  const [inputValue, setInputValue] = useState("");
+  const [nextIndex, setNextIndex] = useState(0);
+  const [entries, setEntries] = useState({});
 
-  handleChange(event) {
-    const inputValue = event.target.value;
-    this.setState((state) => ({
-      inputValue: inputValue,
-      entries: state.entries
-    }))
-  }
+  function handleChange(event) {
+    setInputValue(event.target.value);
+  };
 
-  handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
-
-    const entries = {...this.state.entries}; // copy
-    const newEntry = parseInput(this.state.inputValue);
-    newEntry.index = this.state.nextIndex;
-    entries[this.state.nextIndex] = newEntry;
-    this.setState((state) => ({
-      inputValue: "",
-      nextIndex: state.nextIndex + 1,
-      entries: entries
-    }))
+    const newEntries = {...entries}; // copy
+    const newEntry = parseInput(inputValue);
+    newEntry.index = nextIndex;
+    newEntries[nextIndex] = newEntry;
+    setInputValue("");
+    setNextIndex(nextIndex + 1);
+    setEntries(newEntries)
   }
 
-  handleClick(index, event) {
+  function handleClick(index, event) {
     console.log(index);
     console.log(event.target.checked);
-    const entry = this.state.entries[index];
-    const entries = {...this.state.entries};
+    const entry = entries[index];
+    const newEntries = {...entries};
     const newEntry = entry;
     newEntry.checked = event.target.checked;
-    entries[index] = newEntry;
-    this.setState((state) => ({
-      entries: entries
-    }))
+    newEntries[index] = newEntry;
+    setEntries(newEntries);
   }
 
-  handleDelete(index, event) {
-    const entries = {...this.state.entries};
-    delete entries[index];
-    this.setState((state) => ({
-      entries: entries
-    }))
+  function handleDelete(index, event) {
+    const newEntries = {...entries};
+    delete newEntries[index];
+    setEntries(newEntries);
   }
-  
-  render() {
-    const taskFilter = {
-      checked: false,
-      type: "task",
-      toWhen: ""
-    }
-    const eventFilter = {
-      checked: false,
-      type: "event"
-    }
-    const thingFilter = {
-      checked: false,
-      type: "thing",
-      when: "",
-      toWhen: ""
-    }
-    const todoFilter = {
-      checked: false
-    }
-    const logFilter = {
-      checked: true
-    }
-    return (
-      <div className="entrySystemContainer">
-        <div className="formTableContainer">
-          <Input value={this.state.inputValue} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-          <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={this.state.entries} type={"task"} filter={taskFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-          <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={"event"} filter={eventFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-          <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={this.state.entries} type={"thing"} filter={thingFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-        </div>
-        <div className="tableContainer2">
-          <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-          <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={this.state.entries} type={["task", "event", "thing"]} filter={logFilter} onClick={this.handleClick} onDelete={this.handleDelete} />
-        </div>
+
+  const taskFilter = {
+    checked: false,
+    type: "task",
+    toWhen: ""
+  }
+  const eventFilter = {
+    checked: false,
+    type: "event"
+  }
+  const thingFilter = {
+    checked: false,
+    type: "thing",
+    when: "",
+    toWhen: ""
+  }
+  const todoFilter = {
+    checked: false
+  }
+  const logFilter = {
+    checked: true
+  }
+  return (
+    <div className="entrySystemContainer">
+      <div className="formTableContainer">
+        <Input value={inputValue} handleChange={handleChange} handleSubmit={handleSubmit} />
+        <Table title={"Tasks"} columnHeaders={["Type", "Name", "When"]} values={["type", "name", "when"]} entries={entries} type={"task"} filter={taskFilter} onClick={handleClick} onDelete={handleDelete} />
+        <Table title={"Events"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={entries} type={"event"} filter={eventFilter} onClick={handleClick} onDelete={handleDelete} />
+        <Table title={"Things"} columnHeaders={["Type", "Name"]} values={["type", "name"]} entries={entries} type={"thing"} filter={thingFilter} onClick={handleClick} onDelete={handleDelete} />
       </div>
-    )
-  }
-
+      <div className="tableContainer2">
+        <Table title={"To do"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={entries} type={["task", "event", "thing"]} filter={todoFilter} onClick={handleClick} onDelete={handleDelete} />
+        <Table title={"Log"} columnHeaders={["Type", "Name", "When", "To When"]} values={["type", "name", "when", "toWhen"]} entries={entries} type={["task", "event", "thing"]} filter={logFilter} onClick={handleClick} onDelete={handleDelete} />
+      </div>
+    </div>
+  )
 }
 
-class Page extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { apiResponse: "" };
-  }
+function Page() {
+  const [apiResponse, setApiResponse] = useState("");
 
-  callAPI() {
-    fetch("http://localhost:9000/testAPI")
-      .then(res => res.text())
-      .then(res => this.setState({ apiResponse: res }))
-      .catch(err => err);
-  }
+  useEffect(() => {
+    function callAPI() {
+      fetch("http://localhost:9000/testAPI")
+        .then(res => res.text())
+        .then(res => setApiResponse(res))
+        .catch(err => err);
+    }
+    console.log(' asnyhifnthing');
+    callAPI();
+  })
 
-  componentDidMount() {
-    this.callAPI();
-  }
-
-  render() {
-    return (
-      <div className="pageContainer">
-        <div className="pageTitle">
-          <h1>Page Title</h1>
-          {/*<p>{this.state.apiResponse}</p>*/}
-        </div>
-        <EntrySystem />
+  return (
+    <div className="pageContainer">
+      <div className="pageTitle">
+        <h1>Page Title</h1>
+        {<p>{apiResponse}</p>}
       </div>
-    )
-  }
+      <EntrySystem />
+    </div>
+  )
 }
 
 ReactDOM.render(
