@@ -26,6 +26,7 @@ Here's what the general idea looks like:
 - [x] Basic input recognition and parsing
 - [x] Basic linked database structure and functionality
 - [x] Basic styling
+- [x] Refactorization into functional components with hooks
 - [ ] Storing a single user's (me) data either locally or on a database using express and/or postgresql
 - [ ] Basic note taking system
 - [ ] Advanced parsing
